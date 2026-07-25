@@ -1,0 +1,32 @@
+name: Weekly Paper-Trade Email
+on:
+  schedule:
+    - cron: "30 3 * * 6"     # Saturday 09:00 IST
+  workflow_dispatch:
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Build weekly digest
+        run: python weekly_summary.py
+      - name: Read subject line
+        id: subj
+        run: echo "subject=$(cat output/email_subject.txt)" >> "$GITHUB_OUTPUT"
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: ${{ steps.subj.outputs.subject }}
+          to: ajinkyakolhe2103@gmail.com
+          from: Paper Trade Bot <${{ secrets.MAIL_USERNAME }}>
+          html_body: file://output/email_body.html
