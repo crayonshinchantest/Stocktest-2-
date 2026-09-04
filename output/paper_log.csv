@@ -26,3 +26,4 @@ date,close,rsi,macd_hist,regime,state,entry_signal
 2026-09-01,1929.0,50.7,2.8,up,FLAT,True
 2026-09-02,1931.7,51.2,2.6,up,LONG,True
 2026-09-03,1916.0,48.0,1.3,up,LONG,True
+2026-09-04,1899.0,44.6,-0.6,up,LONG,False
